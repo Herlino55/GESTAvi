@@ -59,19 +59,6 @@ export const Header: React.FC<HeaderProps> = ({ setSidebarOpen }) => {
             )}
           </div>
         </div>
-        
-        <div className="h-6 w-px bg-slate-200" />
-        
-        <div className="text-right hidden sm:block">
-          <p className="text-xs text-slate-400">Date du jour</p>
-          <p className="text-sm font-bold text-slate-700">
-            {new Date().toLocaleDateString('fr-FR', { 
-              weekday: 'long', 
-              day: 'numeric', 
-              month: 'long' 
-            })}
-          </p>
-        </div>
       </div>
     </header>
   );
