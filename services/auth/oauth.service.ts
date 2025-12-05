@@ -17,49 +17,57 @@ export class OAuthService {
     hmac: string;
     redirectTo: string;
   }) {
-    const isValidHmac = await verifyHmac(
-      {
-        code: params.code,
-        company_id: params.companyId,
-        redirect_to: params.redirectTo,
-        timestamp: params.timestamp,
-      },
-      params.hmac
-    );
+    try{
+        const isValidHmac = await verifyHmac(
+          {
+            code: params.code,
+            company_id: params.companyId,
+            redirect_to: params.redirectTo,
+            timestamp: params.timestamp,
+          },
+          params.hmac
+        );
 
-    if (!isValidHmac) {
-      throw new Error('Invalid HMAC signature');
-    }
+        if (!isValidHmac) {
+          throw new Error('Invalid HMAC signature');
+        }
 
-    const timestampAge = Date.now() - parseInt(params.timestamp) * 1000;
-    if (timestampAge > 5 * 60 * 1000) {
-      throw new Error('Request expired');
-    }
+        const timestampAge = Date.now() - parseInt(params.timestamp) * 1000;
+        if (timestampAge > 5 * 60 * 1000) {
+          throw new Error('Request expired');
+        }
 
-    const tokenResponse = await exchangeCodeForToken(params.code);
+        const tokenResponse = await exchangeCodeForToken(params.code);
 
-    const companyInfo = await getCompanyInfo(params.companyId);
+        const companyInfo = await getCompanyInfo(params.companyId);
 
-    // Calculate token expiration date
-    const tokenExpiresAt = new Date(
-      Date.now() + tokenResponse.expires_in_minutes * 60 * 1000
-    );
+        console.log("COMPANY INFO:", companyInfo.name);
 
-    const companyData: CompanyCreate = {
-      id: params.companyId,
-      handle: companyInfo.handle || null,
-      name: companyInfo.name,
-      description: companyInfo.description || null,
-      authorizationCode: params.code || null,
-      accessToken: tokenResponse.access_token || null,
-      refreshToken: tokenResponse.refresh_token || null,
-      tokenExpiresAt: tokenExpiresAt,
-      logoUrl: companyInfo.logoUrl || null,
-      phone: companyInfo.metadata?.contact || null,
-    };
-    await this.companyDBService.upsertCompany(companyData);
+        // Calculate token expiration date
+        const tokenExpiresAt = new Date(
+          Date.now() + tokenResponse.expires_in_minutes * 60 * 1000
+        );
 
-    return { success: true, companyId: params.companyId };
+        const companyData: CompanyCreate = {
+          id: params.companyId,
+          handle: companyInfo.handle || null,
+          name: companyInfo.name || 'Raise',
+          description: companyInfo.description || null,
+          authorizationCode: params.code || null,
+          accessToken: tokenResponse.access_token || null,
+          refreshToken: tokenResponse.refresh_token || null,
+          tokenExpiresAt: tokenExpiresAt,
+          logoUrl: companyInfo.logoUrl || null,
+          phone: companyInfo.metadata?.contact || null,
+        };
+        console.log("DATA SENT TO UPSERT:", companyData);
+        await this.companyDBService.upsertCompany(companyData);
+
+        return { success: true, companyId: params.companyId };
+      }catch(error: any){
+        console.log('erreur dans calback', error)
+        return { error: true, message: error.message };
+      }
   }
 
   validateCallbackParams(params: {
@@ -75,4 +83,5 @@ export class OAuthService {
       params.hmac
     );
   }
+  
 }
