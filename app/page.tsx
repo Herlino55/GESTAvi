@@ -1,6 +1,6 @@
 "use client";
 
-import { getProduct } from "@/dal/get-produt";
+import { getProduct } from "@/dal/product/get-produt";
 import { useAuthStore } from "@/stores";
 import Image from "next/image";
 import { useEffect } from "react";
