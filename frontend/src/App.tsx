@@ -1,7 +1,7 @@
 // import { Home } from "lucide-react"
 import { createBrowserRouter } from "react-router"
 // import Entre from "./Entre"
-// import MainPage from "./MainPage"
+import Main from "./pages/Main"
 // import Accueil from "./Accueil"
 // import Success from "./Success"
 // import UseHook from "./UseHook"
@@ -13,7 +13,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path : '/',
-      element: <MainPage></MainPage>,
+      element: <Main></Main>,
       // children: [
       //   {
       //     path: 'entre',
