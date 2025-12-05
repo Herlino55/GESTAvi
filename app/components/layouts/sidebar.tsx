@@ -1,100 +1,86 @@
-"use client";
-import Icon from "@mdi/react";
-import {
-  mdiMessageOutline,
-  mdiBellOutline,
-  mdiMenu,
-  mdiAccountMultiplePlusOutline,
-  mdiCog,
-  mdiLogout,
-  mdiViewDashboard,
-  mdiChartLine,
-  mdiAccountMultipleOutline,
-  mdiListBoxOutline,
-} from "@mdi/js";
-import { useRouter } from "next/navigation";
+import { Home, Users, Wheat, LogOut, LayoutDashboard, Bird, ClipboardList, ShoppingCart, Wallet } from "lucide-react";
+import { Link, useLocation } from "react-router";
 
-const Sidebar = () => {
-  const router = useRouter();
-
-  const handleLogout = () => {
-    router.push("/login");
-  };
-
-  return (
-    <div
-      className={`h-screen bg-white border-r border-gray-200 shadow-sm transition-all duration-300 ease-in-out flex flex-col py-6 w-[260px]`}
-    >
-      {/* Logo */}
-      <h1 className="font-bold text-2xl text-gray-800 px-5">
-        Instagram
-      </h1>
-
-      {/* Menu */}
-      <ul className="mt-10 px-3 space-y-4 text-gray-700">
-        <SidebarItem path="/admins/dashboard" label="Dashboard" icon={mdiViewDashboard} />
-        <SidebarItem path="/admins/community" label="Community" icon={mdiListBoxOutline} />
-        <SidebarItem path="/admins/statistics" label="Statistics" icon={mdiChartLine} />
-        <SidebarItem path="/admins/view" label="Admins" icon={mdiAccountMultiplePlusOutline} />
-        <SidebarItem path="/admins/users" label="Users" icon={mdiAccountMultipleOutline} />
-        <SidebarItem path="/admins/messages" label="Messages" icon={mdiMessageOutline} />
-
-        {/* Menu More */}
-        <li className="relative group cursor-pointer hover:text-blue-600">
-          <div className="flex items-center space-x-3">
-            <Icon path={mdiMenu} size={1} />
-            <span className="text-sm">More</span>
-          </div>
-
-          {/* Tooltip */}
-          <div className="absolute left-40 top-0 bg-white border border-gray-300 rounded shadow-md p-2 z-20 hidden group-hover:block w-40">
-            <ul>
-              <li>
-                <a
-                  className="flex items-center px-2 py-1 border-b text-sm hover:text-blue-600"
-                  href="/users/settings"
-                >
-                  <Icon path={mdiCog} size={0.8} className="mr-2" /> Settings
-                </a>
-              </li>
-
-              <li>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center w-full text-left px-2 py-1 text-sm hover:text-blue-600"
-                >
-                  <Icon path={mdiLogout} size={0.8} className="mr-2" /> Logout
-                </button>
-              </li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-    </div>
-  );
-};
-
-// Composant réutilisable
-function SidebarItem({
-  path,
-  label,
-  icon,
-}: {
-  path: string;
-  label: string;
-  icon: string;
-}) {
-  return (
-    <li>
-      <a
-        href={path}
-        className="flex items-center space-x-3 hover:text-blue-600 transition"
-      >
-        <Icon path={icon} size={1} />
-        <span className="text-sm">{label}</span>
-      </a>
-    </li>
-  );
+interface SidebarProps {
+    isOpen: boolean;
+    onClose: () => void;
 }
 
-export default Sidebar;
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+    const { pathname } = useLocation();
+
+    const menuItems = [
+        { icon: LayoutDashboard, label: "Tableau de bord", path: "/dashboard" },
+        { icon: Home, label: "Batiments", path: "/batiments" },
+        { icon: Bird, label: "Lots", path: "/lots" },
+        { icon: ClipboardList, label: "Suivi", path: "/suivi" },
+        { icon: Wheat, label: "Aliments", path: "/aliments" },
+        { icon: ShoppingCart, label: "Ventes", path: "/ventes" },
+        { icon: Wallet, label: "Finances", path: "/finances" },
+        { icon: Users, label: "Admin", path: "/admin" },
+    ];
+
+    return (
+        <>
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-20 md:hidden"
+                    onClick={onClose}
+                />
+            )}
+
+            <aside
+                className={`fixed md:static inset-y-0 left-0 z-30
+                w-64 bg-white border-r border-gray-200 
+                transform transition-transform duration-200 ease-in-out
+                ${isOpen ? "translate-x-0" : "-translate-x-full"}
+                md:translate-x-0 flex flex-col
+            `}
+            >
+                {/* Logo */}
+                <div className="h-16 flex items-center px-6 border-b border-gray-100">
+                    <div className="flex items-center gap-2 font-bold text-xl text-green-800">
+                        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                            🐓
+                        </div>
+                        GestAvi
+                    </div>
+                </div>
+
+                {/* Links */}
+                <nav className="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+                    {menuItems.map((item, index) => {
+                        const active = pathname === item.path;
+                        const Icon = item.icon;
+
+                        return (
+                            <Link
+                                key={index}
+                                to={item.path}
+                                className={
+                                    `w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ` +
+                                    (
+                                        active
+                                        ? " text-green-900 border border-green-300" // style actif
+                                        : "text-gray-600 hover:text-green-900" // style normal + hover
+                                    )
+                                }
+                            >
+                                <Icon size={18} />
+                                {item.label}
+                            </Link>
+                        );
+                    })}
+                </nav>
+
+                {/* Logout */}
+                <div className="p-4 border-t border-gray-100">
+                    <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors">
+                        <LogOut size={18} />
+                        Déconnexion
+                    </button>
+                </div>
+            </aside>
+        </>
+    );
+}
