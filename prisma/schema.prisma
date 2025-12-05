@@ -1,18 +1,15 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
-  output = "../app/generated/prisma"
+  output   = "../app/generated/prisma"
 }
 
 datasource db {
   provider = "mysql"
 }
 
+// ----------------------------
+// Genuka Company
+// ----------------------------
 model Company {
   id                String     @id @unique // Genuka company ID
   handle            String?    @unique
@@ -21,12 +18,162 @@ model Company {
   logoUrl           String?
   authorizationCode String?
   accessToken       String?    @db.LongText
-  refreshToken      String?    @db.LongText // OAuth refresh token for session renewal
-  tokenExpiresAt    DateTime? // Access token expiration date
-  phone             String? //  business phone
+  refreshToken      String?    @db.LongText
+  tokenExpiresAt    DateTime?
+  phone             String?
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
 
+  users         User[]
+  batiments     Batiment[]
+  aliments      Aliment[]
+  notifications Notification[]
+  lots          Lot[]
+  ventes        Vente[]
+  transactions  Transaction[]
+  suivisQuotidiens SuiviQuotidien[]
+
   @@index([id])
   @@index([handle])
+}
+
+// ----------------------------
+// Roles
+// ----------------------------
+model Role {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  users User[]
+}
+
+// ----------------------------
+// Users
+// ----------------------------
+model User {
+  id        Int      @id @default(autoincrement())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  name      String
+  email     String   @unique
+  password  String
+  roleId    Int
+  role      Role     @relation(fields: [roleId], references: [id])
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------------------
+// Bâtiments
+// ----------------------------
+model Batiment {
+  id          Int       @id @default(autoincrement())
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  name        String
+  capaciteMax Int
+  isActive    Boolean   @default(true)
+  lots        Lot[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// ----------------------------
+// Lots
+// ----------------------------
+model Lot {
+  id           Int       @id @default(autoincrement())
+  companyId    String
+  company      Company   @relation(fields: [companyId], references: [id])
+  batimentId   Int
+  batiment     Batiment  @relation(fields: [batimentId], references: [id])
+  code         String    @unique
+  quantiteInit Int
+  dateDebut    DateTime
+  prixUnitaire Float
+  statut       String    @default("actif") // actif / vendu
+  ventes       Vente[]
+  transactions Transaction[]
+  suivisQuotidiens SuiviQuotidien[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+// ----------------------------
+// Suivi Quotidien
+// ----------------------------
+model SuiviQuotidien {
+  id             Int      @id @default(autoincrement())
+  lotId          Int
+  lot            Lot      @relation(fields: [lotId], references: [id])
+  companyId      String
+  company        Company  @relation(fields: [companyId], references: [id])
+  date           DateTime
+  mortalite      Int
+  quantiteAliment Float
+  observations   String?
+  createdAt      DateTime @default(now())
+}
+
+// ----------------------------
+// Aliments
+// ----------------------------
+model Aliment {
+  id        Int      @id @default(autoincrement())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  name      String
+  stockInit Int
+  prixKg    Float
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------------------
+// Ventes
+// ----------------------------
+model Vente {
+  id          Int      @id @default(autoincrement())
+  lotId       Int
+  lot         Lot      @relation(fields: [lotId], references: [id])
+  companyId   String
+  company     Company  @relation(fields: [companyId], references: [id])
+  date        DateTime
+  quantite    Int
+  prixUnitaire Float
+  total       Float
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// ----------------------------
+// Transactions
+// ----------------------------
+model Transaction {
+  id          Int       @id @default(autoincrement())
+  lotId       Int?
+  lot         Lot?      @relation(fields: [lotId], references: [id])
+  companyId   String
+  company     Company   @relation(fields: [companyId], references: [id])
+  type        String    // depense / recette
+  categorie   String
+  montant     Float
+  date        DateTime
+  description String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// ----------------------------
+// Notifications
+// ----------------------------
+model Notification {
+  id        Int      @id @default(autoincrement())
+  companyId String
+  company   Company  @relation(fields: [companyId], references: [id])
+  type      String   // warning / urgent
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 }

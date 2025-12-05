@@ -18,23 +18,48 @@ export default function Home() {
   }, [company]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
+   <div className="min-h-screen w-full bg-gray-100 dark:bg-black py-16">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-zinc-900 shadow-lg rounded-xl p-10">
+        
+        {/* Header */}
+        <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-6">
+          👋 Bonjour, {company.name}
+        </h1>
+        <p className="text-gray-600 dark:text-gray-300 mb-10">
+          Voici les informations de votre boutique connectée à Genuka.
+        </p>
 
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="text-3xl font-semibold text-black dark:text-zinc-50">
-            Welcome To {company.name}
-          </h1>
+        {/* Card Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+
+          {/* Company ID */}
+          <div className="p-6 bg-gray-50 dark:bg-zinc-800 rounded-lg shadow-sm">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Company ID</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">
+              {company.id}
+            </p>
+          </div>
+
+          {/* Phone */}
+          <div className="p-6 bg-gray-50 dark:bg-zinc-800 rounded-lg shadow-sm">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Téléphone</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">
+              {company.phone ?? "Non renseigné"}
+            </p>
+          </div>
+
+          {/* Created At */}
+          <div className="p-6 bg-gray-50 dark:bg-zinc-800 rounded-lg shadow-sm">
+            <p className="text-sm text-gray-500 dark:text-gray-400">Créé le</p>
+            <p className="text-lg font-semibold text-gray-900 dark:text-white">
+              {new Date(company.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+
         </div>
-      </main>
+
+
+      </div>
     </div>
   );
 }
