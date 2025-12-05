@@ -1,5 +1,8 @@
+"use client";
+
 import React, { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, Calendar, Package, Skull, CookingPot, User } from 'lucide-react';
+// Les imports Shadcn sont conservés
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -9,6 +12,26 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+
+// --- Composant d'Input stylisé ---
+const Input = ({ label, type = "text", placeholder, value, onChange, icon: Icon, required = false, name }) => (
+    <div>
+        <label className="text-sm font-semibold text-slate-700 mb-1 flex items-center">
+            {Icon && <Icon size={14} className="mr-1 text-emerald-500" />}
+            {label} {required && <span className="text-rose-500 ml-1">*</span>}
+        </label>
+        <input
+            type={type}
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-emerald-500 focus:border-emerald-500 transition duration-150"
+            placeholder={placeholder}
+            value={value}
+            onChange={onChange}
+            required={required}
+            name={name}
+        />
+    </div>
+);
+// ---------------------------------
 
 interface SuiviType {
   id: number;
@@ -24,7 +47,7 @@ interface SuiviProps {
   suivis: SuiviType[];
   addSuivi: (s: SuiviType) => void;
   deleteSuivi: (id: number) => void;
-  onOpenModal?: (modalType: string) => void; // ignore si tu veux
+  onOpenModal?: (modalType: string) => void;
 }
 
 export const Suivi: React.FC<SuiviProps> = ({
@@ -39,9 +62,9 @@ export const Suivi: React.FC<SuiviProps> = ({
   const [openDelete, setOpenDelete] = useState(false);
   const [suiviToDelete, setSuiviToDelete] = useState<number | null>(null);
 
-  // Formulaire Ajout
+  // Formulaire Ajout (avec date initiale du jour)
   const [formData, setFormData] = useState({
-    date: "",
+    date: new Date().toISOString().substring(0, 10),
     lot_code: "",
     mortalite: "",
     aliment_distribue_kg: "",
@@ -49,14 +72,20 @@ export const Suivi: React.FC<SuiviProps> = ({
     observateur: "",
   });
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleCreate = () => {
+    // Validation côté TypeScript (vérifie que les champs obligatoires ne sont pas vides)
     if (
-      !formData.date ||
-      !formData.lot_code ||
-      !formData.mortalite ||
-      !formData.aliment_distribue_kg ||
-      !formData.aliment_nom ||
-      !formData.observateur
+        !formData.date ||
+        !formData.lot_code ||
+        formData.mortalite === "" ||
+        formData.aliment_distribue_kg === "" ||
+        !formData.aliment_nom ||
+        !formData.observateur
     ) {
       alert("Veuillez remplir tous les champs.");
       return;
@@ -75,13 +104,14 @@ export const Suivi: React.FC<SuiviProps> = ({
     addSuivi(newSuivi);
     setOpenAdd(false);
 
+    // Réinitialisation du formulaire (sauf la date du jour)
     setFormData({
-      date: "",
-      lot_code: "",
-      mortalite: "",
-      aliment_distribue_kg: "",
-      aliment_nom: "",
-      observateur: "",
+        date: new Date().toISOString().substring(0, 10),
+        lot_code: "",
+        mortalite: "",
+        aliment_distribue_kg: "",
+        aliment_nom: "",
+        observateur: "",
     });
   };
 
@@ -89,26 +119,31 @@ export const Suivi: React.FC<SuiviProps> = ({
     if (suiviToDelete !== null) {
       deleteSuivi(suiviToDelete);
       setOpenDelete(false);
+      setSuiviToDelete(null);
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4">
+      
       {/* HEADER */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-slate-800">Journal de Suivi</h2>
+      <div className="flex justify-between items-center pb-4 border-b border-gray-100">
+        <h2 className="text-2xl font-bold text-emerald-700">Journal de Suivi</h2>
 
-        <Button onClick={() => setOpenAdd(true)}>
+        <Button 
+            onClick={() => setOpenAdd(true)}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white shadow-md"
+        >
           <Plus size={16} className="mr-2" />
           Saisie Journalière
         </Button>
       </div>
 
       {/* TABLE */}
-      <Card>
+      <Card className="shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 text-slate-600 uppercase">
+            <thead className="bg-emerald-50 text-emerald-800 uppercase sticky top-0 border-b border-emerald-100">
               <tr>
                 <th className="px-6 py-3">Date</th>
                 <th className="px-6 py-3">Lot</th>
@@ -123,24 +158,27 @@ export const Suivi: React.FC<SuiviProps> = ({
             <tbody className="divide-y divide-slate-100">
               {suivis.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="text-center py-8 text-slate-400">
-                    Aucun suivi enregistré.
+                  <td colSpan={7} className="text-center py-8 text-slate-400 font-medium">
+                    Aucun suivi enregistré pour l'instant.
                   </td>
                 </tr>
               ) : (
                 suivis.map(s => (
-                  <tr key={s.id} className="hover:bg-slate-50">
-                    <td className="px-6 py-4">{s.date}</td>
-                    <td className="px-6 py-4 text-blue-600">{s.lot_code}</td>
-                    <td className="px-6 py-4 text-rose-600 font-bold">-{s.mortalite}</td>
-                    <td className="px-6 py-4">{s.aliment_distribue_kg} kg</td>
-                    <td className="px-6 py-4">{s.aliment_nom}</td>
-                    <td className="px-6 py-4">{s.observateur}</td>
+                  <tr key={s.id} className="hover:bg-gray-50 transition duration-100">
+                    <td className="px-6 py-4 text-gray-600">{s.date}</td>
+                    <td className="px-6 py-4 text-amber-600 font-semibold">{s.lot_code}</td>
+                    <td className={`px-6 py-4 font-bold ${s.mortalite > 0 ? 'text-rose-600' : 'text-emerald-600'}`}>
+                        {s.mortalite > 0 ? `-${s.mortalite}` : '0'}
+                    </td>
+                    <td className="px-6 py-4 text-emerald-600 font-semibold">{s.aliment_distribue_kg} kg</td>
+                    <td className="px-6 py-4 text-slate-700">{s.aliment_nom}</td>
+                    <td className="px-6 py-4 text-slate-500">{s.observateur}</td>
 
                     <td className="px-6 py-4 text-right">
                       <Button
                         variant="destructive"
                         size="sm"
+                        className="bg-rose-500 hover:bg-rose-600 text-white p-2"
                         onClick={() => {
                           setSuiviToDelete(s.id);
                           setOpenDelete(true);
@@ -157,110 +195,117 @@ export const Suivi: React.FC<SuiviProps> = ({
         </div>
       </Card>
 
+      
       {/* ───────────────────────────────────────────── */}
-      {/*  DIALOG — AJOUT D'UN SUIVI                  */}
+      {/*  DIALOG — AJOUT D'UN SUIVI (avec flou et styles)                  */}
       {/* ───────────────────────────────────────────── */}
 
+      {/* AJOUT DE LA CLASSE backdrop-blur-sm */}
       <Dialog open={openAdd} onOpenChange={setOpenAdd}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[500px] bg-white/95 backdrop-blur-sm">
           <DialogHeader>
-            <DialogTitle>Nouvelle Saisie de Suivi</DialogTitle>
+            <DialogTitle className="text-2xl font-bold text-emerald-700">Nouvelle Saisie Journalière</DialogTitle>
           </DialogHeader>
 
-          <div className="space-y-3">
-            <div>
-              <label className="text-sm font-medium">Date</label>
-              <input
+          {/* Utilisation du composant Input stylisé */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 py-4">
+            
+            <Input
+                label="Date"
                 type="date"
-                className="w-full px-3 py-2 border rounded"
+                icon={Calendar}
                 value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-              />
-            </div>
+                onChange={handleInputChange}
+                name="date"
+                required
+            />
 
-            <div>
-              <label className="text-sm font-medium">Lot</label>
-              <input
+            <Input
+                label="Code Lot"
                 type="text"
-                className="w-full px-3 py-2 border rounded"
+                icon={Package}
                 placeholder="Ex: LOT-001"
                 value={formData.lot_code}
-                onChange={(e) => setFormData({ ...formData, lot_code: e.target.value })}
-              />
-            </div>
+                onChange={handleInputChange}
+                name="lot_code"
+                required
+            />
 
-            <div>
-              <label className="text-sm font-medium">Mortalité</label>
-              <input
+            <Input
+                label="Mortalité (Nb poulets)"
                 type="number"
-                className="w-full px-3 py-2 border rounded"
+                icon={Skull}
                 value={formData.mortalite}
-                onChange={(e) => setFormData({ ...formData, mortalite: e.target.value })}
-              />
-            </div>
+                onChange={handleInputChange}
+                name="mortalite"
+                required
+            />
 
-            <div>
-              <label className="text-sm font-medium">Aliment distribué (kg)</label>
-              <input
+            <Input
+                label="Aliment distribué (kg)"
                 type="number"
-                className="w-full px-3 py-2 border rounded"
+                icon={CookingPot}
                 value={formData.aliment_distribue_kg}
-                onChange={(e) =>
-                  setFormData({ ...formData, aliment_distribue_kg: e.target.value })
-                }
-              />
-            </div>
+                onChange={handleInputChange}
+                name="aliment_distribue_kg"
+                required
+            />
 
-            <div>
-              <label className="text-sm font-medium">Type d'aliment</label>
-              <input
+            <Input
+                label="Type d'aliment"
                 type="text"
-                className="w-full px-3 py-2 border rounded"
+                icon={CookingPot}
                 placeholder="Ex: Aliment Début"
                 value={formData.aliment_nom}
-                onChange={(e) => setFormData({ ...formData, aliment_nom: e.target.value })}
-              />
-            </div>
+                onChange={handleInputChange}
+                name="aliment_nom"
+                required
+            />
 
-            <div>
-              <label className="text-sm font-medium">Observateur</label>
-              <input
+            <Input
+                label="Observateur"
                 type="text"
-                className="w-full px-3 py-2 border rounded"
+                icon={User}
                 placeholder="Nom de l'observateur"
                 value={formData.observateur}
-                onChange={(e) => setFormData({ ...formData, observateur: e.target.value })}
-              />
-            </div>
+                onChange={handleInputChange}
+                name="observateur"
+                required
+            />
           </div>
 
-          <DialogFooter>
-            <Button onClick={handleCreate}>Enregistrer</Button>
+          <DialogFooter className="pt-4">
+            <Button onClick={handleCreate} className="bg-emerald-600 hover:bg-emerald-700 text-white">
+                <Plus size={16} className="mr-2" />
+                Enregistrer le Suivi
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
+      
       {/* ───────────────────────────────────────────── */}
-      {/*  DIALOG — SUPPRESSION                       */}
+      {/*  DIALOG — SUPPRESSION (avec flou et styles)                       */}
       {/* ───────────────────────────────────────────── */}
 
       <Dialog open={openDelete} onOpenChange={setOpenDelete}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-[425px] bg-white/95 backdrop-blur-sm">
           <DialogHeader>
-            <DialogTitle>Supprimer cette ligne ?</DialogTitle>
+            <DialogTitle className="text-xl font-bold text-rose-600">Confirmer la Suppression</DialogTitle>
           </DialogHeader>
 
-          <p className="text-slate-600">
-            Cette action est irréversible.
+          <p className="text-slate-600 py-2">
+            Êtes-vous sûr de vouloir supprimer cette ligne de suivi ? Cette action est **irréversible**.
           </p>
 
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setOpenDelete(false)}>
+          <DialogFooter className="pt-4">
+            <Button variant="outline" onClick={() => setOpenDelete(false)} className="border-gray-300 hover:bg-gray-100">
               Annuler
             </Button>
 
-            <Button variant="destructive" onClick={confirmDelete}>
-              Supprimer
+            <Button variant="destructive" onClick={confirmDelete} className="bg-rose-600 hover:bg-rose-700 text-white">
+              <Trash2 size={16} className="mr-2" />
+              Supprimer Définitivement
             </Button>
           </DialogFooter>
         </DialogContent>

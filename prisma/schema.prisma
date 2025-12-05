@@ -1,6 +1,5 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
@@ -26,7 +25,61 @@ model Company {
   phone             String? //  business phone
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
+  shops             Shop[]
 
   @@index([id])
   @@index([handle])
+}
+
+model Shop {
+  id           String     @id @default(uuid()) @db.VarChar(36)
+  companyId    String     @map("company_id")
+  name         String
+  description  String?    @db.LongText
+  currencyCode String     @map("currency_code") @default("XAF")
+  metadata     Json?      // Stores additional data like genukaId
+  createdAt    DateTime   @default(now()) @map("created_at")
+  updatedAt    DateTime   @updatedAt @map("updated_at")
+
+  company      Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  userShops    UserShop[]
+
+  @@index([companyId])
+  @@index([name])
+  @@map("shops")
+}
+
+model User {
+  id          String     @id @default(uuid()) @db.VarChar(36)
+  firstName   String?    @map("first_name")
+  lastName    String     @map("last_name")
+  email       String     @unique
+  phone       String?
+  role        String     @default("employee") // employee, manager, admin
+  permissions Json       // Array of permission strings stored as JSON
+  password    String     // Should be hashed before storing
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  userShops   UserShop[]
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+// Table de jonction pour la relation many-to-many entre User et Shop
+model UserShop {
+  id        String   @id @default(uuid()) @db.VarChar(36)
+  userId    String   @map("user_id") @db.VarChar(36)
+  shopId    String   @map("shop_id") @db.VarChar(36)
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shop      Shop     @relation(fields: [shopId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, shopId])
+  @@index([userId])
+  @@index([shopId])
+  @@map("user_shops")
 }
