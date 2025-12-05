@@ -2,6 +2,7 @@
 import { createBrowserRouter } from "react-router"
 // import Entre from "./Entre"
 import Main from "./pages/Main"
+import { Dashboard } from "./pages/Dashboard"
 // import Accueil from "./Accueil"
 // import Success from "./Success"
 // import UseHook from "./UseHook"
@@ -14,15 +15,15 @@ function App() {
     {
       path : '/',
       element: <Main></Main>,
-      // children: [
+      children: [
       //   {
       //     path: 'entre',
       //     element: <Entre></Entre>
       //   },
-      //   {
-      //     path: 'use',
-      //     element: <UseHook></UseHook>
-      //   },
+        {
+          path: 'dashboard',
+          element: <Dashboard />
+        },
       //   {
       //     path: 'resistance',
       //     element: <Accueil></Accueil>
@@ -43,7 +44,7 @@ function App() {
       //     path: 'success',
       //     element: <Success></Success>
       //   }
-      // ]
+      ]
       
     }
         
