@@ -10,12 +10,15 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer 
 } from 'recharts';
 
+// Assuming these components are styled appropriately (e.g., Shadcn UI)
+// For this theme, make sure the default 'primary' color is a shade of green/emerald.
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const Index = () => {
 
   const onOpenModal = (type: string) => {
+    // Logique pour ouvrir un modal (non implémentée ici)
     console.log("Modal demandé :", type);
   };
 
@@ -42,66 +45,84 @@ const Index = () => {
   ];
 
   return (
-    <div className="space-y-6 animate-fadeIn p-6">
+    // 'overflow-y-auto' permet le défilement vertical (coulissant)
+    // 'bg-gray-50' ou 'bg-white' pour le fond blanc général
+    <div className="space-y-6 animate-fadeIn p-6 min-h-screen bg-gray-50 overflow-y-auto">
       
-      {/* KPI CARDS */}
+      {/* 1. KPI CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
 
-        <Card className="p-4 flex items-center justify-between gap-4 bg-white h-32">
-          <div>
-            <p className="text-sm text-slate-500 pb-4">Poulets Actifs</p>
-            <p className="text-2xl font-bold text-black">{totalPoulets}</p>
+        {/* Poulets Actifs - Bleu -> Vert Sarcelle/Emeraude */}
+        <Card className="p-4 flex items-center justify-between bg-white h-32 shadow-md hover:shadow-lg transition duration-300 ">
+          <div className='flex items-center justify-between w-full'>
+            <div>
+              <p className="text-sm text-slate-500 pb-4">Poulets Actifs</p>
+              <p className="text-2xl font-bold text-emerald-600">{totalPoulets}</p>
+            </div>
+            <Bird size={26} className="text-emerald-500" />
           </div>
-          <Bird size={26} className="text-blue-600" />
         </Card>
 
-        <Card className="p-4 flex items-center justify-between gap-4 bg-white h-32">
-          <div>
-            <p className="text-sm text-slate-500 pb-4">Solde Actuel</p>
-            <p className="text-2xl font-bold text-emerald-700">
-              {solde.toLocaleString()} FCFA
-            </p>
+        {/* Solde Actuel - Vert Clair -> Vert Forêt */}
+        <Card className="p-4 flex items-center justify-between bg-white h-32 shadow-md hover:shadow-lg transition duration-300 ">
+          <div className='flex items-center justify-between w-full'>
+            <div>
+              <p className="text-sm text-slate-500 pb-4">Solde Actuel</p>
+              <p className="text-2xl font-bold text-emerald-800">
+                {solde.toLocaleString()} FCFA
+              </p>
+            </div>
+            <Wallet size={26} className="text-emerald-700" />
           </div>
-          <Wallet size={26} className="text-emerald-600" />
+          
         </Card>
 
-        <Card className="p-4 flex items-center justify-between gap-4 bg-white h-32">
-          <div>
-            <p className="text-sm text-slate-500 pb-4">Stock Aliment Total</p>
-            <p className="text-2xl font-bold text-slate-800">{totalStock} kg</p>
+        {/* Stock Aliment Total - Ambre (Or) */}
+        <Card className="p-4 flex items-center justify-between bg-white h-32 shadow-md hover:shadow-lg transition duration-300 ">
+          <div className='flex items-center justify-between w-full'>
+            <div>
+              <p className="text-sm text-slate-500 pb-4">Stock Aliment Total</p>
+              <p className="text-2xl font-bold text-amber-700">{totalStock} kg</p>
+            </div>
+            <Wheat size={26} className="text-amber-600" />
           </div>
-          <Wheat size={26} className="text-amber-600" />
+          
         </Card>
 
-        <Card className="p-4 flex items-center justify-between gap-4 bg-white h-32">
-          <div>
-            <p className="text-sm text-slate-500 pb-4">Alertes</p>
-            <p className="text-2xl font-bold text-rose-600">{unreadAlerts}</p>
+        {/* Alertes - Violet/Rose -> Or / Rouge (pour l'urgence) */}
+        <Card className="p-4 flex items-center justify-between bg-white h-32 shadow-md hover:shadow-lg transition duration-300 ">
+          <div className='flex items-center justify-between w-full'>
+            <div>
+              <p className="text-sm text-slate-500 pb-4">Alertes</p>
+              <p className="text-2xl font-bold text-red-600">{unreadAlerts}</p>
+            </div>
+            <AlertCircle size={26} className="text-red-500" />
           </div>
-          <AlertCircle size={26} className="text-purple-600" />
+          
         </Card>
       </div>
 
-      {/* CHARTS + ACTIONS */}
+      {/* 2. CHARTS + ACTIONS */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        <Card className="lg:col-span-2 p-6">
-          <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
-            <TrendingUp size={20} className="text-blue-500" />
+        {/* Performance Mortalité - Graphique */}
+        <Card className="lg:col-span-2 p-6 shadow-lg bg-white">
+          <h3 className="text-lg font-bold mb-4 flex items-center gap-2 text-emerald-700">
+            <TrendingUp size={20} className="text-emerald-500" />
             Performance Mortalité
           </h3>
 
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#e0e7e5" /> {/* Ligne de grille plus claire */}
                 <XAxis dataKey="jour" />
                 <YAxis />
                 <Tooltip />
                 <Bar 
                   dataKey="mortalite" 
                   barSize={40}
-                  fill="#e4aa0b"
+                  fill="#facc15" // Couleur Or
                   radius={[4,4,0,0]}
                 />
               </BarChart>
@@ -109,21 +130,24 @@ const Index = () => {
           </div>
         </Card>
 
-        {/* ACTIONS RAPIDES */}
-        <Card className="p-6">
-          <h3 className="text-lg font-bold mb-4">Actions Rapides</h3>
+        {/* ACTIONS RAPIDES & Alertes */}
+        <Card className="p-6 shadow-lg bg-white">
+          <h3 className="text-xl font-bold mb-4 text-emerald-700">Actions Rapides</h3>
 
           <div className="space-y-3">
+            {/* Bouton Principal - Utilisation d'une nuance de vert/émeraude */}
             <Button 
-              className="w-full justify-start bg-primary"
+              className="w-full justify-start bg-emerald-600 hover:bg-emerald-700 text-white"
               onClick={() => onOpenModal("NEW_SUIVI")}
             >
               <ClipboardList size={18} className="mr-2" />
               Saisir suivi quotidien
             </Button>
 
+            {/* Autres Boutons - Peut rester gris ou utiliser un vert secondaire */}
             <Button 
-              className="w-full justify-start"
+              variant="outline" // Utilisation de l'outline pour différencier
+              className="w-full justify-start border-emerald-500 text-emerald-600 hover:bg-emerald-50"
               onClick={() => onOpenModal("NEW_VENTE")}
             >
               <ShoppingCart size={18} className="mr-2" />
@@ -131,7 +155,8 @@ const Index = () => {
             </Button>
 
             <Button 
-              className="w-full justify-start"
+              variant="outline"
+              className="w-full justify-start border-emerald-500 text-emerald-600 hover:bg-emerald-50"
               onClick={() => onOpenModal("ADD_STOCK")}
             >
               <Wheat size={18} className="mr-2" />
@@ -139,7 +164,7 @@ const Index = () => {
             </Button>
           </div>
 
-          <h3 className="text-lg font-bold mt-8 mb-4">Alertes Récentes</h3>
+          <h3 className="text-xl font-bold mt-8 mb-4 text-emerald-700">Alertes Récentes</h3>
 
           <div className="space-y-2">
             {notifications.map(n => (
@@ -147,8 +172,8 @@ const Index = () => {
                 key={n.id}
                 className={`p-3 rounded-lg text-sm border-l-4 ${
                   n.niveau === 'URGENT'
-                    ? 'bg-rose-50 border-rose-500 text-rose-700'
-                    : 'bg-amber-50 border-amber-500 text-amber-800'
+                    ? 'bg-red-50 border-red-500 text-red-700' // Urgent reste rouge vif pour l'impact
+                    : 'bg-amber-50 border-amber-500 text-amber-800' // Avertissement en Or/Ambre
                 }`}
               >
                 <p className="font-bold">{n.titre}</p>
