@@ -14,36 +14,36 @@ function App() {
     {
       path : '/',
       element: <MainPage></MainPage>,
-      children: [
-        {
-          path: 'entre',
-          element: <Entre></Entre>
-        },
-        {
-          path: 'use',
-          element: <UseHook></UseHook>
-        },
-        {
-          path: 'resistance',
-          element: <Accueil></Accueil>
-        },
-        {
-          path: 'dessert',
-          element: <Accueil></Accueil>
-        },
-        {
-          path: 'boisson',
-          element: <Accueil></Accueil>
-        },
-        {
-          path: '',
-          element: <Accueil></Accueil>
-        },
-        {
-          path: 'success',
-          element: <Success></Success>
-        }
-      ]
+      // children: [
+      //   {
+      //     path: 'entre',
+      //     element: <Entre></Entre>
+      //   },
+      //   {
+      //     path: 'use',
+      //     element: <UseHook></UseHook>
+      //   },
+      //   {
+      //     path: 'resistance',
+      //     element: <Accueil></Accueil>
+      //   },
+      //   {
+      //     path: 'dessert',
+      //     element: <Accueil></Accueil>
+      //   },
+      //   {
+      //     path: 'boisson',
+      //     element: <Accueil></Accueil>
+      //   },
+      //   {
+      //     path: '',
+      //     element: <Accueil></Accueil>
+      //   },
+      //   {
+      //     path: 'success',
+      //     element: <Success></Success>
+      //   }
+      // ]
       
     }
         
