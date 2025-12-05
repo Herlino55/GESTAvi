@@ -1,8 +1,9 @@
+import { Company } from "@/app/generated/prisma";
 import { CreateShopInput } from "@/types/shop";
 
-export const CreateShop = async (shopData: CreateShopInput,company: any) => {
+export const CreateShop = async (shopData: CreateShopInput,company: Company) => {
   console.log("creating a shop for company:", company);
-
+  shopData.company_id = company.id;
   const options = {
     method: "POST",
     headers: {

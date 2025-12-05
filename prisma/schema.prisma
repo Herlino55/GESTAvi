@@ -1,10 +1,8 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output = "../app/generated/prisma"
 }
 
@@ -13,19 +11,20 @@ datasource db {
 }
 
 model Company {
-  id                String     @id @unique // Genuka company ID
+  id                String     @id @unique
   handle            String?    @unique
   name              String
   description       String?    @db.LongText
   logoUrl           String?
   authorizationCode String?
   accessToken       String?    @db.LongText
-  refreshToken      String?    @db.LongText // OAuth refresh token for session renewal
-  tokenExpiresAt    DateTime? // Access token expiration date
-  phone             String? //  business phone
+  refreshToken      String?    @db.LongText
+  tokenExpiresAt    DateTime?
+  phone             String?
   createdAt         DateTime   @default(now())
   updatedAt         DateTime   @updatedAt
   shops             Shop[]
+  suiviQuotidiens   SuiviQuotidien[]
 
   @@index([id])
   @@index([handle])
@@ -37,12 +36,13 @@ model Shop {
   name         String
   description  String?    @db.LongText
   currencyCode String     @map("currency_code") @default("XAF")
-  metadata     Json?      // Stores additional data like genukaId
+  metadata     Json?
   createdAt    DateTime   @default(now()) @map("created_at")
   updatedAt    DateTime   @updatedAt @map("updated_at")
 
-  company      Company    @relation(fields: [companyId], references: [id], onDelete: Cascade)
-  userShops    UserShop[]
+  company         Company          @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  userShops       UserShop[]
+  suiviQuotidiens SuiviQuotidien[]
 
   @@index([companyId])
   @@index([name])
@@ -55,9 +55,9 @@ model User {
   lastName    String     @map("last_name")
   email       String     @unique
   phone       String?
-  role        String     @default("employee") // employee, manager, admin
-  permissions Json       // Array of permission strings stored as JSON
-  password    String     // Should be hashed before storing
+  role        String     @default("employee")
+  permissions Json
+  password    String
   createdAt   DateTime   @default(now()) @map("created_at")
   updatedAt   DateTime   @updatedAt @map("updated_at")
 
@@ -68,7 +68,6 @@ model User {
   @@map("users")
 }
 
-// Table de jonction pour la relation many-to-many entre User et Shop
 model UserShop {
   id        String   @id @default(uuid()) @db.VarChar(36)
   userId    String   @map("user_id") @db.VarChar(36)
@@ -82,4 +81,39 @@ model UserShop {
   @@index([userId])
   @@index([shopId])
   @@map("user_shops")
+}
+
+model Product {
+  id              String           @id @default(uuid()) @db.VarChar(36)
+  title           String           @db.VarChar(50)
+  handle          String           @db.VarChar(50)
+  content         String           @db.VarChar(100)
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  suiviQuotidiens SuiviQuotidien[]
+
+  @@map("products")
+}
+
+model SuiviQuotidien {
+  id                String   @id @default(uuid()) @db.VarChar(36)
+  companyId         String   @map("company_id")
+  lotId             String   @map("lot_id") @db.VarChar(36)
+  productId         String?  @map("product_id") @db.VarChar(36)
+  dateSuivi         DateTime @map("date_suivi") @db.Date
+  mortalite         Int      @default(0)
+  quantiteAlimentKg Decimal  @default(0) @map("quantite_aliment_kg") @db.Decimal(10, 2)
+  observations      String?  @db.Text
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  company Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  lot     Shop     @relation(fields: [lotId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([companyId])
+  @@index([lotId])
+  @@index([productId])
+  @@index([dateSuivi])
+  @@map("suivi_quotidiens")
 }

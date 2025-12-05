@@ -10,9 +10,9 @@ export interface Shop {
 }
 
 export interface CreateShopInput {
-  company_id: string;
+  company_id?: string;
   name: string;
-  description?: string;
+  description: string;
   currencyCode?: string;
   metadata?: Record<string, any>;
 }

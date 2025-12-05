@@ -33,6 +33,7 @@ export default function Home() {
       setProduct(p);
 
       if (shop) {
+        console.log('contenu de log: ', shop)
         const c = CreateShop(shop, company);
         console.log('response create shop: ',c)
       }
