@@ -36,7 +36,10 @@ export default function DashboardPage() {
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
 
         {/* 👉 Correction ici */}
-        <Suivi suivis={suivis} onOpenModal={openModal} />
+        <div className="p-6">
+            <Suivi suivis={suivis} onOpenModal={openModal} />
+        </div>
+        
       </div>
     </div>
   );

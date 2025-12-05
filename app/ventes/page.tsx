@@ -29,8 +29,10 @@ export default function DashboardPage() {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
-
-        <Ventes ventes={ventes} onOpenModal={openModal} />
+        <div className="p-6">
+            <Ventes ventes={ventes} onOpenModal={openModal} />
+        </div>
+        
       </div>
     </div>
   );

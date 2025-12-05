@@ -41,10 +41,13 @@ export default function DashboardPage() {
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
 
         {/* 👉 Correction ici */}
-        <Batiments 
-          onOpenModal={openModal}
-          batiments={batiments}
-        />
+        <div className="p-6">
+            <Batiments 
+              onOpenModal={openModal}
+              batiments={batiments}
+            />
+        </div>
+        
       </div>
     </div>
   );

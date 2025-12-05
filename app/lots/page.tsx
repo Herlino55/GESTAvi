@@ -43,11 +43,14 @@ export default function DashboardPage() {
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
 
         {/* 👉 ENVOI CORRECT POUR LES LOTS */}
-        <Lots 
-          onOpenModal={openModal}
-          lots={lots}
-          currentUserRole="ADMIN"
-        />
+        <div className="p-6">
+            <Lots 
+            onOpenModal={openModal}
+            lots={lots}
+            currentUserRole="ADMIN"
+            />
+        </div>
+        
       </div>
     </div>
   );

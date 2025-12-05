@@ -22,7 +22,10 @@ export default function DashboardPage() {
       {/* Main content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
-        <Index />
+        <div className="p-6">
+            <Index />
+        </div>
+        
       </div>
     </div>
   );
