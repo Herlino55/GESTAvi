@@ -1,33 +1,59 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// import { Home } from "lucide-react"
+import { createBrowserRouter } from "react-router"
+// import Entre from "./Entre"
+// import MainPage from "./MainPage"
+// import Accueil from "./Accueil"
+// import Success from "./Success"
+// import UseHook from "./UseHook"
+import { RouterProvider } from "react-router"
+
 
 function App() {
-  const [count, setCount] = useState(0)
+
+  const router = createBrowserRouter([
+    {
+      path : '/',
+      element: <MainPage></MainPage>,
+      children: [
+        {
+          path: 'entre',
+          element: <Entre></Entre>
+        },
+        {
+          path: 'use',
+          element: <UseHook></UseHook>
+        },
+        {
+          path: 'resistance',
+          element: <Accueil></Accueil>
+        },
+        {
+          path: 'dessert',
+          element: <Accueil></Accueil>
+        },
+        {
+          path: 'boisson',
+          element: <Accueil></Accueil>
+        },
+        {
+          path: '',
+          element: <Accueil></Accueil>
+        },
+        {
+          path: 'success',
+          element: <Success></Success>
+        }
+      ]
+      
+    }
+        
+  ])
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs bg-red-200">
-        Click on the Vite and React logos to learn more
-      </p>
+
+      <RouterProvider router={router}></RouterProvider>
+      
     </>
   )
 }
