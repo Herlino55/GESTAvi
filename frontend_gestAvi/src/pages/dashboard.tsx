@@ -1,6 +1,6 @@
 import React from 'react';
 import { Bird, Wallet, Wheat, AlertCircle, TrendingUp, ClipboardList, ShoppingCart } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { useFarmStore } from '../stores/useFarmStore';
@@ -38,45 +38,45 @@ export const Dashboard: React.FC<DashboardProps> = ({ onOpenModal }) => {
     <div className="space-y-6 animate-fadeIn">
       {/* KPI Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="p-4 flex items-center gap-4 bg-gradient-to-br from-blue-50 to-white">
-          <div className="p-3 bg-blue-100 text-blue-600 rounded-lg">
-            <Bird size={24} />
-          </div>
+        <Card className="p-4 flex items-center justify-between gap-4 bg-white h-32">
           <div>
-            <p className="text-sm text-slate-500">Poulets Actifs</p>
-            <p className="text-2xl font-bold text-slate-800">{totalPoulets}</p>
+            <p className="text-sm text-slate-500 pb-4">Poulets Actifs</p>
+            <p className="text-2xl font-bold text-black">{totalPoulets}</p>
+          </div>
+          <div className="p-3 text-blue-600">
+            <Bird size={12} />
           </div>
         </Card>
 
         {currentUser?.role !== 'EMPLOYE' && (
-          <Card className="p-4 flex items-center gap-4 bg-gradient-to-br from-emerald-50 to-white">
-            <div className="p-3 bg-emerald-100 text-emerald-600 rounded-lg">
-              <Wallet size={24} />
-            </div>
+          <Card className="p-4 flex items-center justify-between gap-4 bg-white h-32">
             <div>
-              <p className="text-sm text-slate-500">Solde Actuel</p>
+              <p className="text-sm text-slate-500 pb-4">Solde Actuel</p>
               <p className="text-2xl font-bold text-emerald-700">{formatMoney(solde)}</p>
+            </div>
+            <div className="p-3 text-emerald-600">
+              <Wallet size={12} />
             </div>
           </Card>
         )}
 
-        <Card className="p-4 flex items-center gap-4 bg-gradient-to-br from-amber-50 to-white">
-          <div className="p-3 bg-amber-100 text-amber-600 rounded-lg">
-            <Wheat size={24} />
-          </div>
+        <Card className="p-4 flex items-center justify-between gap-4 bg-white h-32">
           <div>
-            <p className="text-sm text-slate-500">Stock Aliment Total</p>
+            <p className="text-sm text-slate-500 pb-4">Stock Aliment Total</p>
             <p className="text-2xl font-bold text-slate-800">{totalStock} kg</p>
+          </div>
+          <div className="p-3 text-amber-600">
+            <Wheat size={12} />
           </div>
         </Card>
 
-        <Card className="p-4 flex items-center gap-4 bg-gradient-to-br from-purple-50 to-white">
-          <div className="p-3 bg-purple-100 text-purple-600 rounded-lg">
-            <AlertCircle size={24} />
-          </div>
+        <Card className="p-4 flex items-center justify-between gap-4 bg-white h-32">
           <div>
-            <p className="text-sm text-slate-500">Alertes</p>
+            <p className="text-sm text-slate-500 pb-4">Alertes</p>
             <p className="text-2xl font-bold text-rose-600">{unreadAlerts}</p>
+          </div>
+          <div className="p-3  text-purple-600">
+            <AlertCircle size={12} />
           </div>
         </Card>
       </div>
@@ -90,19 +90,18 @@ export const Dashboard: React.FC<DashboardProps> = ({ onOpenModal }) => {
           </h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData}>
+              <BarChart data={chartData}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                 <XAxis dataKey="jour" />
                 <YAxis />
                 <Tooltip />
-                <Line 
-                  type="monotone" 
+                <Bar 
                   dataKey="mortalite" 
-                  stroke="#ef4444" 
-                  strokeWidth={2} 
-                  dot={{ r: 4 }} 
+                  fill="#e4aa0bff" 
+                  barSize={40} 
+                  radius={[4, 4, 0, 0]} 
                 />
-              </LineChart>
+              </BarChart>
             </ResponsiveContainer>
           </div>
         </Card>
@@ -112,7 +111,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onOpenModal }) => {
           <h3 className="text-lg font-bold mb-4">Actions Rapides</h3>
           <div className="space-y-3">
             <Button 
-              className="w-full justify-start" 
+              className="w-full justify-start bg-primary" 
               variant="primary" 
               icon={ClipboardList} 
               onClick={() => onOpenModal('NEW_SUIVI')}
@@ -160,6 +159,37 @@ export const Dashboard: React.FC<DashboardProps> = ({ onOpenModal }) => {
               <p className="text-slate-400 text-sm">Aucune alerte à signaler.</p>
             )}
           </div>
+        </Card>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Quick Actions */}
+        <Card className="p-6">
+          <h3 className="text-lg font-bold mb-4">Historique des ventes</h3>
+          <table className="w-full text-sm text-left">
+            <thead className="bg-slate-50 uppercase">
+              <tr>
+                <th className="px-6 py-3">Date</th>
+                <th className="px-6 py-3">Lot</th>
+                <th className="px-6 py-3">Quantité</th>
+                <th className="px-6 py-3">Prix Unit.</th>
+                <th className="px-6 py-3 text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+                <tr >
+                  <td className="px-6 py-4">!</td>
+                  <td className="px-6 py-4 text-blue-600 font-medium">2</td>
+                  <td className="px-6 py-4">20</td>
+                  <td className="px-6 py-4">20</td>
+                  <td className="px-6 py-4 text-right font-bold text-emerald-600">
+                    20/09/2023
+                  </td>
+                </tr>
+            </tbody>
+          </table>
+
         </Card>
       </div>
     </div>

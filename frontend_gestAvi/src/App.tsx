@@ -121,7 +121,7 @@ export default function App() {
       <div className="flex-1 flex flex-col min-w-0">
         <Header setSidebarOpen={setSidebarOpen} />
         
-        <main className="flex-1 overflow-auto p-4 lg:p-8 relative">
+        <main className="flex-1 overflow-auto p-4 lg:p-4 relative">
           {renderActivePage()}
         </main>
       </div>
