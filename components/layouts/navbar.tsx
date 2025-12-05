@@ -4,7 +4,7 @@ interface HeaderProps {
     onMenuClick: () => void;
 }
 
-export default function Header({ onMenuClick }: HeaderProps) {
+export default function Navbar({ onMenuClick }: HeaderProps) {
     return (
         <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 lg:px-8 sticky top-0 z-10">
             <div className="flex items-center gap-4">
