@@ -1,27 +1,75 @@
-import React from 'react';
-import { Plus } from 'lucide-react';
+import React, { useState } from 'react';
+import { Plus, Trash2 } from 'lucide-react';
+
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 interface Lot {
   id: number;
   code: string;
   batiment_nom: string;
-  statut: 'VENDU' | 'DEMARRAGE' | 'EN_COURS';
   quantite_initiale: number;
   quantite_actuelle: number;
+  prix_total: number;
 }
 
 interface LotsProps {
-  onOpenModal: (modalType: string, lotId?: number) => void;
-  lots: Lot[];                     // ⬅️ DONNÉES VIA PROPS
-  currentUserRole: string;         // ⬅️ ROLE EN PROPS
+  lots: Lot[];
+  addLot: (newLot: Lot) => void;
+  deleteLot: (id: number) => void;
+  currentUserRole: string;
 }
 
-export const Lots: React.FC<LotsProps> = ({ onOpenModal, lots, currentUserRole }) => {
+export const Lots: React.FC<LotsProps> = ({ lots, addLot, deleteLot, currentUserRole }) => {
 
-  // Fonction interne pour taux de mortalité
+  // Dialog states
+  const [openAdd, setOpenAdd] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [lotToDelete, setLotToDelete] = useState<number | null>(null);
+
+  // Form state
+  const [formData, setFormData] = useState({
+    code: "",
+    quantite_initiale: "",
+    prix_total: "",
+  });
+
+  const handleCreateLot = () => {
+    if (!formData.code || !formData.quantite_initiale || !formData.prix_total) {
+      alert("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    const newLot: Lot = {
+      id: Date.now(),
+      code: formData.code,
+      batiment_nom: "Bâtiment A",
+      quantite_initiale: Number(formData.quantite_initiale),
+      quantite_actuelle: Number(formData.quantite_initiale),
+      prix_total: Number(formData.prix_total),
+    };
+
+    addLot(newLot);
+    setFormData({ code: "", quantite_initiale: "", prix_total: "" });
+    setOpenAdd(false);
+  };
+
+  const confirmDeleteLot = () => {
+    if (lotToDelete !== null) {
+      deleteLot(lotToDelete);
+    }
+    setOpenDelete(false);
+  };
+
+  // Calcul mortalité
   const getMortalityRate = (lot: Lot) => {
     const morts = lot.quantite_initiale - lot.quantite_actuelle;
     return (morts / lot.quantite_initiale) * 100;
@@ -29,45 +77,37 @@ export const Lots: React.FC<LotsProps> = ({ onOpenModal, lots, currentUserRole }
 
   return (
     <div className="space-y-6">
-      {/* En-tête */}
+
+      {/* HEADER */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-slate-800">Gestion des Lots</h2>
 
         {currentUserRole !== 'EMPLOYE' && (
-          <Button  onClick={() => onOpenModal('NEW_LOT')}>
+          <Button onClick={() => setOpenAdd(true)}>
+            <Plus size={16} className="mr-2" />
             Nouveau Lot
           </Button>
         )}
       </div>
 
-      {/* Liste */}
+      {/* LISTE */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {lots.map(lot => {
           const mortalityRate = getMortalityRate(lot);
 
           return (
             <Card key={lot.id} className="relative group hover:shadow-md transition-shadow">
-              <div
-                className={`h-2 w-full ${
-                  lot.statut === 'VENDU'
-                    ? 'bg-slate-400'
-                    : lot.statut === 'DEMARRAGE'
-                    ? 'bg-blue-500'
-                    : 'bg-emerald-500'
-                }`}
-              />
+              <div className="h-2 w-full bg-emerald-500" />
 
               <div className="p-6">
+
                 {/* Titre */}
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h3 className="text-xl font-bold text-slate-800">{lot.code}</h3>
                     <p className="text-slate-500 text-sm">{lot.batiment_nom}</p>
                   </div>
-
-                  <Badge variant={lot.statut === 'VENDU' ? 'secondary' : 'outline'}>
-                    {lot.statut}
-                  </Badge>
+                  <Badge variant="outline">LOT</Badge>
                 </div>
 
                 {/* Stats */}
@@ -88,31 +128,103 @@ export const Lots: React.FC<LotsProps> = ({ onOpenModal, lots, currentUserRole }
                   </div>
                 </div>
 
-                {/* Boutons */}
-                <div className="flex gap-2">
-                  <Button
-                    className="flex-1 text-xs"
-                    variant="secondary"
-                    onClick={() => onOpenModal('NEW_SUIVI', lot.id)}
-                  >
-                    Suivi
-                  </Button>
-
-                  {lot.statut !== 'VENDU' && currentUserRole !== 'EMPLOYE' && (
+                {/* Button delete */}
+                {currentUserRole !== 'EMPLOYE' && (
+                  <div className="flex justify-end">
                     <Button
-                      className="flex-1 text-xs"
-                      variant="default"
-                      onClick={() => onOpenModal('NEW_VENTE', lot.id)}
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
+                        setLotToDelete(lot.id);
+                        setOpenDelete(true);
+                      }}
                     >
-                      Vendre
+                      <Trash2 size={16} />
                     </Button>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </Card>
           );
         })}
       </div>
+
+      {/* ╔════════════════════════════════╗ */}
+      {/*   DIALOG — AJOUTER UN LOT        */}
+      {/* ╚════════════════════════════════╝ */}
+
+      <Dialog open={openAdd} onOpenChange={setOpenAdd}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Ajouter un nouveau lot</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-3">
+            <div>
+              <label className="text-sm font-medium">Nom du lot</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded"
+                value={formData.code}
+                onChange={(e) => setFormData({ ...formData, code: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Quantité initiale</label>
+              <input
+                type="number"
+                className="w-full px-3 py-2 border rounded"
+                value={formData.quantite_initiale}
+                onChange={(e) => setFormData({ ...formData, quantite_initiale: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Prix total</label>
+              <input
+                type="number"
+                className="w-full px-3 py-2 border rounded"
+                value={formData.prix_total}
+                onChange={(e) => setFormData({ ...formData, prix_total: e.target.value })}
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button onClick={handleCreateLot}>Créer</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+
+      {/* ╔════════════════════════════════╗ */}
+      {/*   DIALOG — SUPPRIMER UN LOT      */}
+      {/* ╚════════════════════════════════╝ */}
+
+      <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirmer la suppression</DialogTitle>
+          </DialogHeader>
+
+          <p className="text-slate-600">
+            Voulez-vous vraiment supprimer ce lot ?  
+            Cette action est irréversible.
+          </p>
+
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setOpenDelete(false)}>
+              Annuler
+            </Button>
+
+            <Button variant="destructive" onClick={confirmDeleteLot}>
+              Supprimer
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
     </div>
   );
 };

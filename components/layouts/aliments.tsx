@@ -16,6 +16,7 @@ interface AlimentsProps {
   aliments: Aliment[];  // 👈 tu reçois maintenant les données par props
 }
 
+
 export const Aliments: React.FC<AlimentsProps> = ({ onOpenModal, aliments }) => {
   return (
     <div className="space-y-6">

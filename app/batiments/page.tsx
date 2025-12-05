@@ -9,7 +9,7 @@ export default function DashboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   // 👉 Données exemple (tu pourras remplacer par ton API)
-  const [batiments, setBatiments] = useState<Batiment[]>([
+  const [batiments, setBatiments] = useState<any>([
   {
     id: 1,
     nom: "Bloc A",
