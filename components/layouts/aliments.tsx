@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Plus, AlertTriangle } from 'lucide-react';
+
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from '@/components/ui/dialog';
 
 interface Aliment {
   id: number;
@@ -12,21 +21,49 @@ interface Aliment {
 }
 
 interface AlimentsProps {
-  onOpenModal: (modalType: string) => void;
-  aliments: Aliment[];  // 👈 tu reçois maintenant les données par props
+  aliments: Aliment[];
+  addStock: (added: { nom: string; quantite: number }) => void;
 }
 
+export const Aliments: React.FC<AlimentsProps> = ({ aliments, addStock }) => {
 
-export const Aliments: React.FC<AlimentsProps> = ({ onOpenModal, aliments }) => {
+  // Dialog state
+  const [openAdd, setOpenAdd] = useState(false);
+
+  // Form state
+  const [form, setForm] = useState({
+    nom: "",
+    quantite: "",
+  });
+
+  const handleAddStock = () => {
+    if (!form.nom || !form.quantite) {
+      alert("Veuillez remplir tous les champs.");
+      return;
+    }
+
+    addStock({
+      nom: form.nom,
+      quantite: Number(form.quantite),
+    });
+
+    setForm({ nom: "", quantite: "" });
+    setOpenAdd(false);
+  };
+
   return (
     <div className="space-y-6">
+
+      {/* HEADER */}
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-slate-800">Gestion des Stocks Aliment</h2>
-        <Button icon={Plus} onClick={() => onOpenModal('ADD_STOCK')}>
-          Réapprovisionner
+
+        <Button onClick={() => setOpenAdd(true)}>
+          <Plus className="mr-2" /> Réapprovisionner
         </Button>
       </div>
 
+      {/* CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {aliments.map(a => {
           const isCritical = a.stock_actuel <= a.seuil_critique;
@@ -74,6 +111,44 @@ export const Aliments: React.FC<AlimentsProps> = ({ onOpenModal, aliments }) => 
           );
         })}
       </div>
+
+      {/* DIALOG — AJOUT STOCK */}
+      <Dialog open={openAdd} onOpenChange={setOpenAdd}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Réapprovisionnement</DialogTitle>
+          </DialogHeader>
+
+          <div className="space-y-3">
+
+            <div>
+              <label className="text-sm font-medium">Nom de l’aliment</label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 border rounded"
+                value={form.nom}
+                onChange={(e) => setForm({ ...form, nom: e.target.value })}
+              />
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Quantité ajoutée (kg)</label>
+              <input
+                type="number"
+                className="w-full px-3 py-2 border rounded"
+                value={form.quantite}
+                onChange={(e) => setForm({ ...form, quantite: e.target.value })}
+              />
+            </div>
+
+          </div>
+
+          <DialogFooter>
+            <Button onClick={handleAddStock}>Ajouter</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
     </div>
   );
 };
