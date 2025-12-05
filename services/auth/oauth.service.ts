@@ -48,7 +48,7 @@ export class OAuthService {
     const companyData: CompanyCreate = {
       id: params.companyId,
       handle: companyInfo.handle || null,
-      name: companyInfo.name,
+      name: companyInfo.name || null,
       description: companyInfo.description || null,
       authorizationCode: params.code || null,
       accessToken: tokenResponse.access_token || null,
