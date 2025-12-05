@@ -1,33 +1,53 @@
 import React, { useState } from 'react';
-import { Bird, ChevronRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { ChevronRight } from 'lucide-react';
 import { Input } from '../components/ui/input';
 import { Button } from '../components/ui/button';
-import { Badge } from '../components/ui/badge';
-import { useAuthStore } from '../stores/useAuthStore';
+import { loginUser } from './FetchData';
+// import { useAuthStore } from '../stores/useAuthStore';
 
 export const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const login = useAuthStore(state => state.login);
+  const [form, setForm] = useState({email: "", password: ""});
+  // const login = useAuthStore(state => state.login);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const success = login(email);
-    if (!success) {
-      alert("Email non reconnu. Veuillez réessayer.");
+    try {
+      loginUser(form.email, form.password)
+        .then(user => {
+          console.log("User logged in:", user);
+          window.location.href = '/dashboard';
+          
+        })
+        .catch(error => {
+          console.error("Login error:", error);
+          alert("Invalid credentials");
+        });
+      
+      
     }
+    catch (error) {
+      console.error("Login error:", error);
+      alert("Invalid credentials");
+    }
+    // const success = login(form.email, form.password);
+    // if (!success) {
+    //   alert("Email non reconnu. Veuillez réessayer.");
+    // }
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
-        <div className="flex justify-center mb-6">
-          <div className="bg-blue-600 p-3 rounded-2xl shadow-lg shadow-blue-200">
-            <Bird size={40} className="text-white" />
+    <div className="min-h-screen flex items-center flex-col justify-center p-4">
+      <div className="flex justify-center mb-6">
+          <div className=" p-3 rounded-2xl shadow-blue-200">
+            <img src="images/logo2.jpg" className='w-[150px]' alt="logo-GestAvi" />
           </div>
         </div>
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        
         
         <h2 className="text-2xl font-bold text-center text-slate-800 mb-2">
-          Ferme Manager Pro
+          Connexion
         </h2>
         <p className="text-center text-slate-500 mb-8">
           Connectez-vous à votre compte
@@ -35,22 +55,22 @@ export const Login: React.FC = () => {
         
         <form onSubmit={handleSubmit} className="space-y-4">
           <Input 
-            label="Email de démonstration" 
+            label="Email" 
             type="email" 
             placeholder="ex: admin@ferme.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            value={form.email}
+            onChange={(e) => setForm({...form, email: e.target.value})}
             required
           />
           
-          <div className="text-sm text-slate-500 pt-2">
-            <p className="font-bold mb-1">Emails de démo disponibles :</p>
-            <ul className="list-disc list-inside space-y-0.5 text-xs ml-2">
-              <li><Badge variant="info">ADMIN</Badge> : admin@ferme.com</li>
-              <li><Badge variant="info">SECRETAIRE</Badge> : sarah@ferme.com</li>
-              <li><Badge variant="info">EMPLOYE</Badge> : paul@ferme.com</li>
-            </ul>
-          </div>
+          <Input 
+            label="Mot de passe" 
+            type="password" 
+            value={form.password}
+            onChange={(e) => setForm({...form, password: e.target.value})}
+            required
+          />  
+          
           
           <Button 
             type="submit" 
