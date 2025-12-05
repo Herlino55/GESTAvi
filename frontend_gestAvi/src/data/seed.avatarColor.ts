@@ -1,1 +1,0 @@
-export const SEED_AVATAR_COLORS = ["bg-purple-600", "bg-blue-600", "bg-emerald-600", "bg-rose-600", "bg-amber-600"];
