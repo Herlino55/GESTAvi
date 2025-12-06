@@ -1,7 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { Shop } from "@/app/generated/prisma";
+
 // GET ALL SHOPS
-export const GetShops = async (company: any) => {
-  console.log("fetching all shops for company:", company);
+export const GetShops = async (company: any): Promise<Shop[]> => {
 
   const options = {
     method: "GET",
