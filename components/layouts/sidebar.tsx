@@ -16,7 +16,6 @@ interface SidebarProps {
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname(); // ✅ Next.js native
-  const router = useRouter();
 
   const menuItems = [
     { icon: LayoutDashboard, label: "Tableau de bord", path: "/dashboard" },
@@ -49,10 +48,13 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Logo */}
         <div className="h-16 flex items-center px-6 border-b border-gray-100">
           <div className="flex items-center gap-2 font-bold text-xl text-green-800">
-            <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+            {/* <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
               🐓
             </div>
-            GestAvi
+            GestAvi */}
+            <div>
+              <img src="/logo2.jpg" alt="" />
+            </div>
           </div>
         </div>
 

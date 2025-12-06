@@ -33,9 +33,6 @@ const router = useRouter();
             <div className="p-2 bg-emerald-700 rounded-lg">
               <Feather className="w-6 h-6 text-amber-400" />
             </div>
-            <span className="text-2xl font-bold text-emerald-900 tracking-tight">
-              GEST<span className="text-amber-500">Avi</span>
-            </span>
           </div>
           <button 
             onClick={() => setCurrentView('landing')}
@@ -180,9 +177,9 @@ const router = useRouter();
                 className="w-20 h-8 text-amber-400"
               />
               </div>
-              <span className="text-2xl font-bold text-emerald-900 tracking-tight">
+              {/* <span className="text-2xl font-bold text-emerald-900 tracking-tight">
                 GEST<span className="text-amber-500">Avi</span>
-              </span>
+              </span> */}
             </div>
             <div className="hidden md:flex space-x-8 text-emerald-900 font-medium">
               <a href="#vision" className="hover:text-amber-600 transition-colors">Notre Vision</a>
