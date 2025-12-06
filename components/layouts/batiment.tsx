@@ -3,6 +3,8 @@ import { Plus } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { GetShops } from '@/dal/shop/get.shop';
+import { useAuthStore } from "@/stores";
 
 interface Batiment {
   id: number;
@@ -18,6 +20,11 @@ interface BatimentsProps {
 }
 
 export const Batiments: React.FC<BatimentsProps> = ({ onOpenModal, batiments = [] }) => {
+
+  const { company } = useAuthStore();
+  const getAllBatiments = () => {
+    const batimentsList = GetShops(company?.id);
+  };
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">

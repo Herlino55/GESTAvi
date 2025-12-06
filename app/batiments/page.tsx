@@ -27,6 +27,8 @@ export default function DashboardPage() {
   },
 ]);
 
+
+
   const openModal = (type: string) => {
     console.log("Ouverture du modal :", type);
   };
