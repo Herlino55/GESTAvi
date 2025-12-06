@@ -2,8 +2,8 @@
 
 import { UiProvider } from "@/stores/ui";
 import LandingPage from "./landingPage/page";
-import { LoaderOverlay } from "@/middleware/ui/loaderOverlay";
-import { ToastNotification } from "@/middleware/ui/toastNotification";
+import { LoaderOverlay } from "@/middlewares/ui/loaderOverlay";
+import { ToastNotification } from "@/middlewares/ui/toastNotification";
 
 export default function Page() {
     return <LandingPage />;

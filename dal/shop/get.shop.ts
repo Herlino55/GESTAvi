@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // GET ALL SHOPS
 export const GetShops = async (company: any) => {
   console.log("fetching all shops for company:", company);

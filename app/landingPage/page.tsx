@@ -1,9 +1,11 @@
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable react-hooks/static-components */
+/* eslint-disable react/no-unescaped-entities */
 "use client";
 
 import React, { useEffect, useState } from 'react';
 import { ArrowRight, Sun, Sprout, Wheat, Feather, ArrowLeft, Shield, FileText, Lock } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import chicken from '../../public/chicken-farm.jpg';
 
 const LandingPage = () => {
   const [currentView, setCurrentView] = useState('landing');
@@ -17,7 +19,7 @@ const router = useRouter();
 
   // Fonction pour gérer le clic sur le bouton GESTAvi
   const handleGenukaClick = () => {
-    router.push('/dashboard')
+    router.push('/layout')
     console.log("Redirection vers GESTAvi...");
     // window.location.href = "https://GESTAvi.com"; // À activer en prod
   };
@@ -65,7 +67,7 @@ const router = useRouter();
     return (
       <div className="min-h-screen font-sans bg-stone-50 text-stone-800 flex flex-col">
         <LegalHeader />
-        <main className="flex-grow pt-32 pb-20 px-4">
+        <main className="grow pt-32 pb-20 px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <div className="inline-flex items-center justify-center p-3 bg-amber-100 rounded-full mb-4">
@@ -108,7 +110,7 @@ const router = useRouter();
     return (
       <div className="min-h-screen font-sans bg-stone-50 text-stone-800 flex flex-col">
         <LegalHeader />
-        <main className="flex-grow pt-32 pb-20 px-4">
+        <main className="grow pt-32 pb-20 px-4">
           <div className="max-w-4xl mx-auto">
             <div className="text-center mb-12">
               <div className="inline-flex items-center justify-center p-3 bg-emerald-100 rounded-full mb-4">
@@ -206,7 +208,7 @@ const router = useRouter();
             className="w-full h-full object-cover"
           />
           {/* Overlay dégradé Vert/Or subtil */}
-          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-emerald-900/40 to-black/70"></div>
+          <div className="absolute inset-0 bg-linear-to-b from-black/60 via-emerald-900/40 to-black/70"></div>
         </div>
 
         <div className="relative z-10 text-center px-4 max-w-4xl mx-auto mt-16">
@@ -218,7 +220,7 @@ const router = useRouter();
           
           <h1 className="text-5xl md:text-7xl font-extrabold text-white mb-6 leading-tight drop-shadow-lg">
             Élevez votre potentiel <br/>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-300 to-amber-500">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-amber-300 to-amber-500">
               Naturellement.
             </span>
           </h1>
