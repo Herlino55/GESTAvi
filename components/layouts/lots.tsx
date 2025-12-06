@@ -76,7 +76,7 @@ export const Lots: React.FC<LotsProps> = ({ lots, addLot, deleteLot, currentUser
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fadeIn p-6 min-h-screen bg-gray-50 overflow-y-auto">
 
       {/* HEADER */}
       <div className="flex justify-between items-center">

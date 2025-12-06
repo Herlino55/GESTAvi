@@ -24,6 +24,48 @@ export default function DashboardPage() {
     occupation_actuelle: 0,
     capacite_max: 150,
   },
+  {
+    id: 3,
+    nom: "Bloc C",
+    statut: "ACTIF",
+    occupation_actuelle: 20,
+    capacite_max: 200,
+  },
+  {
+    id: 4,
+    nom: "Bloc D",
+    statut: "ACTIF",
+    occupation_actuelle: 50,
+    capacite_max: 150,
+  },
+  {
+    id: 5,
+    nom: "Bloc E",
+    statut: "ACTIF",
+    occupation_actuelle: 120,
+    capacite_max: 200,
+  },
+  {
+    id: 6,
+    nom: "Bloc F",
+    statut: "INACTIF",
+    occupation_actuelle: 0,
+    capacite_max: 150,
+  },
+  {
+    id: 7,
+    nom: "Bloc G",
+    statut: "ACTIF",
+    occupation_actuelle: 120,
+    capacite_max: 200,
+  },
+  {
+    id: 8,
+    nom: "Bloc H",
+    statut: "INACTIF",
+    occupation_actuelle: 0,
+    capacite_max: 150,
+  },
 ]);
 
   const openModal = (type: string) => {
@@ -37,7 +79,7 @@ export default function DashboardPage() {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-y-auto">
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
 
         {/* 👉 Correction ici */}

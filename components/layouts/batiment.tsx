@@ -19,7 +19,7 @@ interface BatimentsProps {
 
 export const Batiments: React.FC<BatimentsProps> = ({ onOpenModal, batiments = [] }) => {
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fadeIn p-6 min-h-screen bg-gray-50 overflow-y-auto">
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold text-slate-800">Infrastructures</h2>
         <Button onClick={() => onOpenModal('NEW_BATIMENT')}>
