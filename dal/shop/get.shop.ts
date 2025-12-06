@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Shop } from "@/app/generated/prisma";
+import { Shop } from "@/types/model";
+
+// import { Shop } from "@/app/generated/prisma";
 
 // GET ALL SHOPS
 export const GetShops = async (company: any): Promise<Shop[]> => {

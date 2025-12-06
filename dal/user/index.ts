@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Company, User } from "@/app/generated/prisma/client";
 
 // Configuration de base pour les requêtes
-const getRequestOptions = (company: Company, method: string, body?: any) => {
+const getRequestOptions = (company: any, method: string, body?: any) => {
   const options: any = {
     method,
     headers: {

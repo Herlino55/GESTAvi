@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Company } from "@/app/generated/prisma";
-import { CreateShopInput } from "@/types/shop";
+import { Shop } from "@/types/model";
 
-export const CreateShop = async (shopData: CreateShopInput,company: Company) => {
+export const CreateShop = async (shopData: Partial<Shop>,company: any) => {
   console.log("creating a shop for company:", company);
   shopData.company_id = company.id;
   const options = {

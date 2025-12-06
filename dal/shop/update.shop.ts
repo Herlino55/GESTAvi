@@ -1,7 +1,9 @@
-import { Shop } from "@/app/generated/prisma/client";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
+import { Shop } from "@/types/model";
 
 // UPDATE SHOP
-export const UpdateShop = async (company: any, id: string, shopData: Shop) => {
+export const UpdateShop = async (company: any, id: string, shopData: Partial<Shop>) => {
   console.log("updating shop:", id);
 
   const options = {

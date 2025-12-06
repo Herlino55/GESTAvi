@@ -19,7 +19,7 @@ const router = useRouter();
 
   // Fonction pour gérer le clic sur le bouton GESTAvi
   const handleGenukaClick = () => {
-    router.push('/layout')
+    router.push('/dashboard');
     console.log("Redirection vers GESTAvi...");
     // window.location.href = "https://GESTAvi.com"; // À activer en prod
   };
