@@ -26,6 +26,46 @@ export default function DashboardPage() {
       quantite_initiale: 300,
       quantite_actuelle: 0,
     },
+    {
+      id: 3,
+      code: "LOT-003",
+      batiment_nom: "Bloc C",
+      statut: "EN_COURS",
+      quantite_initiale: 600,
+      quantite_actuelle: 370,
+    },
+    {
+      id: 4,
+      code: "LOT-004",
+      batiment_nom: "Bloc D",
+      statut: "VENDU",
+      quantite_initiale: 300,
+      quantite_actuelle: 0,
+    },
+    {
+      id: 5,
+      code: "LOT-005",
+      batiment_nom: "Bloc E",
+      statut: "VENDU",
+      quantite_initiale: 800,
+      quantite_actuelle: 0,
+    },
+    {
+      id: 6,
+      code: "LOT-006",
+      batiment_nom: "Bloc F",
+      statut: "VENDU",
+      quantite_initiale: 200,
+      quantite_actuelle: 0,
+    },
+    {
+      id: 7,
+      code: "LOT-007",
+      batiment_nom: "Bloc G",
+      statut: "EN_COURS",
+      quantite_initiale: 500,
+      quantite_actuelle: 170,
+    },
   ]);
 
   const openModal = (type: string, id?: number) => {
@@ -39,7 +79,7 @@ export default function DashboardPage() {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-y-auto">
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
 
         {/* 👉 ENVOI CORRECT POUR LES LOTS */}

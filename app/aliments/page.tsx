@@ -9,9 +9,42 @@ export default function DashboardPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [aliments, setAliments] = useState([
-    { id: 1, nom: "Maïs", stock_actuel: 120, seuil_alerte: 80, seuil_critique: 40 },
-    { id: 2, nom: "Soja", stock_actuel: 50, seuil_alerte: 40, seuil_critique: 20 },
-    { id: 3, nom: "CMV", stock_actuel: 10, seuil_alerte: 20, seuil_critique: 10 },
+    {
+    "id": 1,
+    "nom": "Maïs",
+    "unité": "Tonnes",
+    "stock_actuel": 250,
+    "seuil_alerte": 180,
+    "seuil_critique": 90,
+    "statut": "Normal"
+  },
+  {
+    "id": 2,
+    "nom": "Soja",
+    "unité": "Tonnes",
+    "stock_actuel": 100,
+    "seuil_alerte": 80,
+    "seuil_critique": 40,
+    "statut": "Alerte"
+  },
+  {
+    "id": 3,
+    "nom": "Concentré Minéral Vitaminé (CMV)",
+    "unité": "Sacs (25kg)",
+    "stock_actuel": 30,
+    "seuil_alerte": 40,
+    "seuil_critique": 20,
+    "statut": "Critique"
+  },
+  {
+    "id": 5,
+    "nom": "Blé / Sorgho",
+    "unité": "Tonnes",
+    "stock_actuel": 75,
+    "seuil_alerte": 90,
+    "seuil_critique": 45,
+    "statut": "Alerte"
+  }
   ]);
 
   const openModal = (type: string) => {

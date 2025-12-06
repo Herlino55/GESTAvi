@@ -19,6 +19,51 @@ export default function DashboardPage() {
       aliment_nom: "Maïs",
       observateur: "Jean",
     },
+    {
+      id: 2,
+      date: "2024-06-02",
+      lot_code: "LOT-01",
+      mortalite: 3,
+      aliment_distribue_kg: 12,
+      aliment_nom: "Maïs",
+      observateur: "Jean",
+    },
+    {
+      id: 3,
+      date: "2024-06-04",
+      lot_code: "LOT-01",
+      mortalite: 4,
+      aliment_distribue_kg: 13,
+      aliment_nom: "Maïs",
+      observateur: "Jean",
+    },
+    {
+      id: 4,
+      date: "2024-06-01",
+      lot_code: "LOT-01",
+      mortalite: 3,
+      aliment_distribue_kg: 12,
+      aliment_nom: "Maïs",
+      observateur: "Jean",
+    },
+    {
+      id: 5,
+      date: "2024-06-01",
+      lot_code: "LOT-01",
+      mortalite: 3,
+      aliment_distribue_kg: 12,
+      aliment_nom: "Maïs",
+      observateur: "Jean",
+    },
+    {
+      id: 6,
+      date: "2024-06-01",
+      lot_code: "LOT-01",
+      mortalite: 3,
+      aliment_distribue_kg: 12,
+      aliment_nom: "Maïs",
+      observateur: "Jean",
+    },
   ]);
 
   const openModal = (type: string) => {
@@ -32,7 +77,7 @@ export default function DashboardPage() {
         onClose={() => setIsSidebarOpen(false)}
       />
 
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-y-auto">
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
 
         {/* 👉 Correction ici */}

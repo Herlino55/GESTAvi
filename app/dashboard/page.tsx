@@ -20,9 +20,9 @@ export default function DashboardPage() {
       />
 
       {/* Main content */}
-      <div className="flex-1 flex flex-col overflow-y-auto">
+      <div className="flex-1 flex flex-col ">
         <Navbar onMenuClick={() => setIsSidebarOpen(true)} />
-        <div className="p-6">
+        <div className="p-6 overflow-y-auto">
             <Index />
         </div>
         
