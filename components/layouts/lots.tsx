@@ -87,8 +87,10 @@ export const Lots: React.FC<LotsProps> = ({ lots, addLot, deleteLot, currentUser
 
   // Calcul du prix unitaire initial
   const getPrixUnitaire = (lot: Lot) => {
-    if (lot.quantite_initiale === 0) return 0;
-    return lot.prix_total / lot.quantite_initiale;
+    if (lot.quantite_initiale === 0)
+      return 0;
+    else
+      return lot.prix_total / lot.quantite_initiale;
   };
 
   return (
@@ -117,6 +119,7 @@ export const Lots: React.FC<LotsProps> = ({ lots, addLot, deleteLot, currentUser
           {lots.map(lot => {
             const mortalityRate = getMortalityRate(lot);
             const prixUnitaire = getPrixUnitaire(lot);
+            console.log('Lot:', lot, 'Mortality Rate:', mortalityRate, 'Prix Unitaire:', prixUnitaire);
             // const mortalityColor = mortalityRate > 10 ? 'bg-rose-500' : (mortalityRate > 5 ? 'bg-amber-500' : 'bg-emerald-500');
 
             return (

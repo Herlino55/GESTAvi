@@ -16,7 +16,8 @@ export default function DashboardPage() {
       batiment_nom: "Bloc A",
       statut: "EN_COURS",
       quantite_initiale: 500,
-      quantite_actuelle: 470,
+      quantite_actuelle: 481,
+      prix_total: 150000
     },
     {
       id: 2,
@@ -25,7 +26,8 @@ export default function DashboardPage() {
       statut: "VENDU",
       quantite_initiale: 300,
       quantite_actuelle: 0,
-    },
+      prix_total: 150000
+   },
     {
       id: 3,
       code: "LOT-003",
@@ -33,6 +35,7 @@ export default function DashboardPage() {
       statut: "EN_COURS",
       quantite_initiale: 600,
       quantite_actuelle: 370,
+      prix_total: 150000
     },
     {
       id: 4,
@@ -41,7 +44,8 @@ export default function DashboardPage() {
       statut: "VENDU",
       quantite_initiale: 300,
       quantite_actuelle: 0,
-    },
+ 
+ prix_total: 150000   },
     {
       id: 5,
       code: "LOT-005",
@@ -49,7 +53,8 @@ export default function DashboardPage() {
       statut: "VENDU",
       quantite_initiale: 800,
       quantite_actuelle: 0,
-    },
+      prix_total: 150000
+   },
     {
       id: 6,
       code: "LOT-006",
@@ -57,7 +62,8 @@ export default function DashboardPage() {
       statut: "VENDU",
       quantite_initiale: 200,
       quantite_actuelle: 0,
-    },
+      prix_total: 150000
+   },
     {
       id: 7,
       code: "LOT-007",
@@ -65,6 +71,7 @@ export default function DashboardPage() {
       statut: "EN_COURS",
       quantite_initiale: 500,
       quantite_actuelle: 170,
+      prix_total: 150000
     },
   ]);
 

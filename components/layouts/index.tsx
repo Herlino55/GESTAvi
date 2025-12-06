@@ -56,7 +56,7 @@ const Index = () => {
         <Card className="p-4 flex items-center justify-between bg-white h-32 shadow-md hover:shadow-lg transition duration-300 ">
           <div className='flex items-center justify-between w-full'>
             <div>
-              <p className="text-sm text-slate-500 pb-4">Poulets Actifs</p>
+              <p className="text-sm text-slate-500 pb-4">Quantites de Poulets</p>
               <p className="text-2xl font-bold text-emerald-600">{totalPoulets}</p>
             </div>
             <Bird size={26} className="text-emerald-500" />
