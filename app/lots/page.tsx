@@ -17,6 +17,7 @@ export default function DashboardPage() {
       statut: "EN_COURS",
       quantite_initiale: 500,
       quantite_actuelle: 470,
+      prix_total: 2350,
     },
     {
       id: 2,
@@ -25,6 +26,7 @@ export default function DashboardPage() {
       statut: "VENDU",
       quantite_initiale: 300,
       quantite_actuelle: 0,
+      prix_total: 0,
     },
   ]);
 
@@ -44,10 +46,8 @@ export default function DashboardPage() {
 
         {/* 👉 ENVOI CORRECT POUR LES LOTS */}
         <div className="p-6">
-            <Lots 
-            onOpenModal={openModal}
-            lots={lots}
-            currentUserRole="ADMIN"
+            <Lots
+            {...({ onOpenModal: openModal, lots, currentUserRole: "ADMIN" } as any)}
             />
         </div>
         
